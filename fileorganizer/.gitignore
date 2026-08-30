@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+
+# App runtime data (don't commit personal rules/tags)
+rules.json
+config.json
+fileorganizer.db
+
+# PyInstaller build output
+build/
+dist/
+*.spec.bak
