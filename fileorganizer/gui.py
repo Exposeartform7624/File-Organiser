@@ -84,13 +84,18 @@ class App(ttk.Window):
         db.init_db()
         self.cfg = config.load_config()
         self.observer = None
- 
+        self.watching = False
+
         header = ttk.Frame(self, padding=(16, 14, 16, 6))
         header.pack(fill="x")
         ttk.Label(header, text="File Organizer", font=("Segoe UI", 16, "bold")).pack(side="left")
-        self.status_dot = ttk.Label(header, text="●", bootstyle="success", font=("Segoe UI", 12))
+        self.status_dot = ttk.Label(header, text="●", bootstyle="secondary", font=("Segoe UI", 12))
         self.status_dot.pack(side="right")
-        ttk.Label(header, text="watching", bootstyle="secondary").pack(side="right", padx=(0, 4))
+        self.status_label = ttk.Label(header, text="stopped", bootstyle="secondary")
+        self.status_label.pack(side="right", padx=(0, 4))
+        self.watch_toggle_btn = ttk.Button(header, text="Start Watching", command=self.toggle_watching,
+                                            bootstyle="success", width=14)
+        self.watch_toggle_btn.pack(side="right", padx=(0, 12))
         ttk.Button(header, text="Help", command=self.show_help,
                    bootstyle="secondary-outline", width=8).pack(side="right", padx=(0, 12))
  
@@ -115,14 +120,13 @@ class App(ttk.Window):
         self.log_box.pack(fill="x")
  
         self.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.start_watching()
- 
+
         if is_first_run:
             self.after(300, self.show_help)
- 
+
     def show_help(self):
         HelpWindow(self)
- 
+
     def log(self, msg):
         def _write():
             self.log_box.configure(state="normal")
@@ -131,24 +135,45 @@ class App(ttk.Window):
             self.log_box.configure(state="disabled")
             self.files_tab.refresh()
         self.after(0, _write)
- 
+
+    def toggle_watching(self):
+        if self.watching:
+            self.stop_watching()
+        else:
+            self.start_watching()
+
     def start_watching(self):
         if self.observer:
             self.observer.stop()
             self.observer.join()
+            self.observer = None
         watch_folder = self.cfg["watch_folder"]
         output_base = self.cfg["output_base"]
         Path(watch_folder).mkdir(parents=True, exist_ok=True)
         Path(output_base).mkdir(parents=True, exist_ok=True)
+        self.watching = True
+        self.status_dot.configure(bootstyle="success")
+        self.status_label.configure(text="watching")
+        self.watch_toggle_btn.configure(text="Stop Watching", bootstyle="danger-outline")
         threading.Thread(
             target=self._start_watcher_thread,
             args=(watch_folder, output_base),
             daemon=True
         ).start()
- 
+
+    def stop_watching(self):
+        if self.observer:
+            self.observer.stop()
+            self.observer.join()
+            self.observer = None
+        self.watching = False
+        self.status_dot.configure(bootstyle="secondary")
+        self.status_label.configure(text="stopped")
+        self.watch_toggle_btn.configure(text="Start Watching", bootstyle="success")
+
     def _start_watcher_thread(self, watch_folder, output_base):
         self.observer = watcher.start_watcher(watch_folder, output_base, log=self.log)
- 
+
     def on_close(self):
         if self.observer:
             self.observer.stop()
@@ -200,8 +225,11 @@ class SettingsTab(ttk.Frame):
         self.app.cfg["watch_folder"] = self.watch_var.get()
         self.app.cfg["output_base"] = self.output_var.get()
         config.save_config(self.app.cfg)
-        self.app.start_watching()
-        messagebox.showinfo(APP_TITLE, "Saved. Watcher restarted.")
+        if self.app.watching:
+            self.app.start_watching()
+            messagebox.showinfo(APP_TITLE, "Saved. Watcher restarted.")
+        else:
+            messagebox.showinfo(APP_TITLE, "Saved. Click \"Start Watching\" to begin.")
  
  
 class RulesTab(ttk.Frame):
@@ -408,4 +436,3 @@ class FilesTab(ttk.Frame):
  
 if __name__ == "__main__":
     App().mainloop()
- 
