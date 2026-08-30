@@ -38,7 +38,11 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    # UPX-compressed binaries are strongly associated with malware packers,
+    # which is a big driver of antivirus/SmartScreen false positives on
+    # PyInstaller exes. Leaving the exe uncompressed (bigger file, but far
+    # less "suspicious"-looking) meaningfully cuts down on false flags.
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,          # no black console window behind the GUI

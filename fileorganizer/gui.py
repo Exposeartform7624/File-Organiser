@@ -10,9 +10,66 @@ import config
 import rules as rules_mod
 import db
 import watcher
- 
 APP_TITLE = "File Organizer"
 THEME = "darkly"  # dark, flat, modern ttkbootstrap theme
+ 
+HELP_TEXT = """Welcome to File Organizer!
+ 
+QUICK START
+1. Go to the Settings tab and pick a Watched folder (files dropped here
+   get organized automatically) and an Output folder (where the sorted
+   subfolders will be created).
+2. Go to the Rules tab to define how files get sorted - by extension,
+   filename text, size, or age. The first matching rule wins; anything
+   that matches nothing goes into "Unsorted".
+3. Once a file's been organized, find it in the Files & Tags tab and add
+   your own tags so you can search for it later.
+ 
+The app runs quietly in the background watching your folder the whole
+time it's open - you don't need to do anything else.
+ 
+A NOTE ON SECURITY WARNINGS
+Since this app isn't code-signed (that costs money and isn't required
+for it to work safely), you may see warnings when downloading or
+running it:
+ 
+- Chrome may say the download is "suspicious" - click the small arrow
+  next to the blocked download and choose "Keep" or "Keep anyway."
+- Windows SmartScreen may say it's from an "unknown publisher" - click
+  "More info" then "Run anyway."
+ 
+These are common false positives for small, independently-built apps
+like this one - not a sign anything is actually wrong.
+ 
+You can reopen this help anytime from the "Help" button up top.
+"""
+ 
+ 
+class HelpWindow(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.title("Welcome / Help")
+        self.geometry("520x520")
+        self.configure(bg="#1a1d21")
+        self.transient(parent)
+ 
+        frame = ttk.Frame(self, padding=16)
+        frame.pack(fill="both", expand=True)
+ 
+        text = tk.Text(
+            frame, wrap="word", bg="#1a1d21", fg="#e6e6e6",
+            relief="flat", borderwidth=0, font=("Segoe UI", 10),
+            padx=4, pady=4
+        )
+        text.insert("1.0", HELP_TEXT)
+        text.configure(state="disabled")
+        text.pack(fill="both", expand=True, pady=(0, 12))
+ 
+        ttk.Button(frame, text="Got it", command=self.destroy,
+                   bootstyle="success", width=16).pack()
+ 
+        self.grab_set()
+        self.focus_set()
  
  
 class App(ttk.Window):
@@ -21,6 +78,8 @@ class App(ttk.Window):
         self.title(APP_TITLE)
         self.geometry("920x600")
         self.minsize(760, 480)
+ 
+        is_first_run = not config.CONFIG_PATH.exists()
  
         db.init_db()
         self.cfg = config.load_config()
@@ -32,6 +91,8 @@ class App(ttk.Window):
         self.status_dot = ttk.Label(header, text="●", bootstyle="success", font=("Segoe UI", 12))
         self.status_dot.pack(side="right")
         ttk.Label(header, text="watching", bootstyle="secondary").pack(side="right", padx=(0, 4))
+        ttk.Button(header, text="Help", command=self.show_help,
+                   bootstyle="secondary-outline", width=8).pack(side="right", padx=(0, 12))
  
         nb = ttk.Notebook(self, bootstyle="dark")
         nb.pack(fill="both", expand=True, padx=16, pady=(0, 8))
@@ -55,6 +116,12 @@ class App(ttk.Window):
  
         self.protocol("WM_DELETE_WINDOW", self.on_close)
         self.start_watching()
+ 
+        if is_first_run:
+            self.after(300, self.show_help)
+ 
+    def show_help(self):
+        HelpWindow(self)
  
     def log(self, msg):
         def _write():
