@@ -1,13 +1,17 @@
 name: Build Windows EXE
+
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: fileorganizer
     steps:
       - uses: actions/checkout@v4
 
@@ -28,12 +32,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: FileOrganizer-windows
-          path: dist/FileOrganizer.exe
+          path: fileorganizer/dist/FileOrganizer.exe
 
       - name: Attach exe to GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/FileOrganizer.exe
+          files: fileorganizer/dist/FileOrganizer.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
