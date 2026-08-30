@@ -59,34 +59,23 @@ picked up live — for as long as watching stays on.
 6. Click **Stop Watching** whenever you want to pause it — your rules and
    settings stay saved for next time.
 
-## Building a standalone .exe (no Python required to run it)
+## Getting a standalone .exe (no Python required to run it)
 
-**Option A — build locally on Windows:**
+**Option A — download the latest release (easiest, no build needed):**
+
+Grab the prebuilt `FileOrganizer.exe` straight from the Releases page:
+
+[**Download latest release**](https://github.com/souvikdey2396-byte/File-Organiser/releases/latest)
+
+No Python install required just download and run.
+
+**Option B — build it yourself locally on Windows:**
 ```
 pip install -r requirements.txt
 pip install pyinstaller
 pyinstaller file_organizer.spec --noconfirm
 ```
 The exe appears at `dist\FileOrganizer.exe`. Or just double-click `build.bat`.
-
-**Option B — auto-build via GitHub Actions (recommended for distributing from your repo):**
-
-1. Push this whole folder — including the `.github/workflows/build.yml`
-   file — to your GitHub repo. That workflow file is what makes GitHub
-   build the exe for you.
-2. Tag a release and push the tag:
-   ```
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-3. GitHub Actions spins up a Windows runner, builds `FileOrganizer.exe`, and
-   automatically attaches it to a new Release on your repo — visible under
-   the "Releases" section on the right side of your repo page.
-4. Anyone can then go to your repo's Releases page and download
-   `FileOrganizer.exe` directly no Python install needed on their end.
-
-You can also trigger a build manually anytime from the repo's **Actions**
-tab ("Run workflow") without needing to push a new tag.
 
 ### Notes on the exe
 - First launch may take a couple seconds longer than the Python version
